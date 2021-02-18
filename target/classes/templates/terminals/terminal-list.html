@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="UTF-8">
+    <title>所有终端页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,book-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+</head>
+
+<body>
+<!--<div class="x-nav">-->
+            <!--<span class="layui-breadcrumb">-->
+                <!--<a href="">首页</a>-->
+                <!--<a href="">演示</a>-->
+                <!--<a>-->
+                    <!--<cite>导航元素</cite></a>-->
+            <!--</span>-->
+    <!--<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"-->
+       <!--onclick="location.reload()" title="刷新">-->
+        <!--<i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>-->
+    <!--</a>-->
+<!--</div>-->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <!--此处的搜索利用点击事件，后台为get请求，所以此处的form标签没必要加
+                    在开发搜索功能的时候，由于form标签的缘故，会多发一个selectList的请求，
+                    从而跳转到终端列表页面，无法看到调价搜索出来的结果-->
+                    <!--<form class="layui-form layui-col-space5">-->
+                    <div class="layui-input-inline layui-show-xs-block">
+                        <input id="kind" type="text" name="kind" placeholder="输入类别查询" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                    <div class="layui-input-inline layui-show-xs-block">
+                        <button class="layui-btn" onclick="kindsearch()">
+                            <i class="layui-icon">&#xe615;</i></button>
+                    </div>
+
+                    <!--</form>-->
+                </div>
+                <div class="layui-card-header">
+                    <button shiro:hasPermission="C" class="layui-btn"
+                            onclick="xadmin.open('录入终端','/terminal/to-terminal-add',600,460)">
+                        <i class="layui-icon"></i>添加
+                    </button>
+                    <button shiro:hasPermission="R" class="layui-btn" onclick="exportExcel()">
+                        <i class="layui-icon"></i>导出excel
+                    </button>
+                    <!--<button class="layui-btn layui-btn-normal" onclick="backtoBooklist()">用户列表</button>-->
+                </div>
+
+                <div class="layui-card-body ">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <!--<th>-->
+                                <!--<input type="checkbox" name="" lay-skin="primary">-->
+                            <!--</th>-->
+                            <th>终端编号</th>
+                            <th>所在区域</th>
+                            <th>终端所在部门</th>
+                            <th>终端所在地址</th>
+                            <th>使用人</th>
+                            <th>设备大类</th>
+                            <th>设备分类</th>
+                            <th>使用状态</th>
+                            <th>使用属性</th>
+                            <th>启用时间</th>
+                            <th>操作</th>
+                            <!--terminals.ter_id, terminals.state, terminals.enabledDate, organization.org_company,-->
+                            <!--organization.org_department, organization.org_address, employee.e_name,-->
+                            <!--mainCategory.c_main_name, category.c_name-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="terminals:${page.list}">
+                            <!--<td>-->
+                                <!--<input type="checkbox" name="" lay-skin="primary">-->
+                            <!--</td>-->
+                            <td th:text="${terminals.ter_id}"></td>
+                            <td th:text="${terminals.area.area_name}"></td>
+                            <!--<td th:text="${terminals.organization.org_company}"></td>-->
+                            <td th:text="${terminals.organization.org_department}"></td>
+                            <td th:text="${terminals.organization.org_address}"></td>
+                            <td th:text="${terminals.employee.e_name}"></td>
+                            <td th:text="${terminals.mainCategory.c_main_name}"></td>
+                            <td th:text="${terminals.category.c_name}"></td>
+                            <td th:text="${terminals.state}"></td>
+                            <td th:text="${terminals.attribute}"></td>
+                            <td th:text="${terminals.enabledDate}"></td>
+                            <td class="td-manage">
+                                <!-- shiro:hasPermission="U" -->
+                                <a shiro:hasPermission="R" title="详细信息" th:value="${terminals.ter_id}"
+                                   onclick="xadmin.open2('详细信息','/terminal/to-look-more/','600','540',false,this)"
+                                   href="javascript:">
+                                    <i class="layui-icon">&#xe63c;</i>
+                                </a>
+                                <span>&nbsp;&nbsp;</span>
+                                <!--<a shiro:hasPermission="U" title="修改" th:value="${book.id}"-->
+                                   <!--onclick="xadmin.open2('编辑','/book/to-book-edit/','600','540',false,this)"-->
+                                   <!--href="javascript:;"></a>-->
+                                <a  shiro:hasPermission="U" title="编辑" th:value="${terminals.ter_id}"
+                                    onclick="xadmin.open2('编辑','/terminal/to-terminal-edit/','600','540',false,this)"
+                                    href="javascript:">
+                                    <i class="layui-icon">&#xe642;</i>
+                                </a>
+                                <span>&nbsp;&nbsp;</span>
+                                <!--<a shiro:hasPermission="D" title="删除" th:value="${book.id}" onclick="member_del(this)"></a>-->
+                                <a shiro:hasPermission="D" title="删除" th:value="${terminals.ter_id}" onclick="terminal_del(this)">
+                                    <i class="layui-icon">&#xe640;</i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body ">
+                    <div class="page">
+                        <!--当前页数小于等于1时，上一页还是显示第一页的信息-->
+                        <div th:if="${page.pageNum} le 1">
+                            <a class="prev" th:href="@{/terminal/selectList(pn=1)}">&lt;&lt;</a>
+                            <a class="num" th:href="@{/terminal/selectList(pn=${page.pageNum})}">上一页</a>
+                            <span class="current" th:href="@{/terminal/selectList(pn=${page.pageNum})}"
+                                  th:text="${page.pageNum}"></span>
+                            <a class="num" th:if="${page.pageNum} lt ${page.pages}"
+                               th:href="@{/terminal/selectList(pn=${page.pageNum+1})}">下一页</a>
+                            <a class="next" th:href="@{/terminal/selectList(pn=${page.pages})}">&gt;&gt;</a>
+                        </div>
+                        <!--当前页数大于等于最后一页时，点击下一页还是显示最尾页页的信息-->
+                        <div th:if="${page.pageNum} != 1 and ${page.pageNum} ge ${page.pages}">
+                            <a class="prev" th:href="@{/terminal/selectList(pn=1)}">&lt;&lt;</a>
+                            <a class="num" th:href="@{/terminal/selectList(pn=${page.pageNum-1})}">上一页</a>
+                            <span class="current" th:href="@{/terminal/selectList(pn=${page.pageNum})}"
+                                  th:text="${page.pageNum}"></span>
+                            <a class="num" th:href="@{/terminal/selectList(pn=${page.pageNum})}">下一页</a>
+                            <a class="next" th:href="@{/terminal/selectList(pn=${page.pages})}">&gt;&gt;</a>
+                        </div>
+                        <!--非首尾页-->
+                        <div th:if="${page.pageNum} gt 1 and ${page.pageNum} lt ${page.pages}">
+                            <a class="prev" th:href="@{/terminal/selectList(pn=1)}">&lt;&lt;</a>
+                            <a class="num" th:href="@{/terminal/selectList(pn=${page.pageNum-1})}">上一页</a>
+                            <span class="current" th:href="@{/terminal/selectList(pn=${page.pageNum})}"
+                                  th:text="${page.pageNum}"></span>
+                            <a class="num" th:href="@{/terminal/selectList(pn=${page.pageNum+1})}">下一页</a>
+                            <a class="next" th:href="@{/terminal/selectList(pn=${page.pages})}">&gt;&gt;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>layui.use(['laydate', 'form'],
+    function () {
+        //这两句是关键
+        $ = layui.jquery;
+        var form = layui.form;
+
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+
+    });
+
+
+/*用户-停用*/
+function member_stop(obj, id) {
+    layer.confirm('确认要停用吗？',
+        function (index) {
+
+            if ($(obj).attr('title') == '启用') {
+
+                //发异步把用户状态进行更改
+                $(obj).attr('title', '停用');
+                $(obj).find('i').html('&#xe62f;');
+
+                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                layer.msg('已停用!', {
+                    icon: 5,
+                    time: 1000
+                });
+
+            } else {
+                $(obj).attr('title', '启用');
+                $(obj).find('i').html('&#xe601;');
+
+                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                layer.msg('已启用!', {
+                    icon: 5,
+                    time: 1000
+                });
+            }
+
+        });
+}
+
+/*用户-删除*/
+function terminal_del(obj) {
+    //拿到元素的value（即id），传给异步删除的请求
+    var id = obj.getAttribute('value');
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+id);
+    layer.confirm('确认要删除吗？',
+        function (index) {
+            //发异步删除数据
+            $(obj).parents("tr").remove();
+            //在确认删除后，发送删除请求
+            $.ajax({
+                type: 'GET',
+                url: "/terminal/deleteById",
+                data: {'id': id},
+            });
+            layer.msg('已删除!', {
+                icon: 1,
+                time: 1000
+            });
+        });
+}
+/* 导出终端Excel表 */
+function exportExcel(){
+    $.ajax({
+        type: 'GET',
+        url: "/terminal/exportExcel",
+    });
+    layer.msg('已导出到桌面!',{
+        icon: 1,
+        time: 2000
+    });
+}
+
+
+function delAll(argument) {
+
+    var data = tableCheck.getData();
+
+    layer.confirm('确认要删除吗？' + data,
+        function (index) {
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {
+                icon: 1
+            });
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+}
+
+
+function kindsearch() {
+    var kind = document.getElementById('kind').value;
+    //去掉字符前后的空格
+    var kin = $.trim(kind);
+    if (kin.length == 0) {
+        alert("请输入类别");
+    } else {
+        window.location.href = "/book/toSearchList/" + kin;
+    }
+}
+function backtoBooklist() {
+    window.location.href = "/book/selectList";
+}
+
+
+</script>
+
+</html>

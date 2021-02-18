@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ct.dao.terminalsDao">
+    <resultMap id="terminalsMap" type="com.ct.entity.terminals">
+        <result property="ter_id" column="ter_id" jdbcType="VARCHAR"/>
+        <result property="org_id" column="org_id" jdbcType="INTEGER"/>
+        <result property="e_id" column="e_id" jdbcType="INTEGER"/>
+        <result property="c_id" column="c_id" jdbcType="INTEGER"/>
+        <result property="c_main_id" column="c_main_id" jdbcType="INTEGER"/>
+        <result property="area_id" column="area_id" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="VARCHAR"/>
+        <result property="enabledDate" column="enabledDate" jdbcType="VARCHAR"/>
+        <result property="brand" column="brand" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="mainBoard" column="mainBoard" jdbcType="VARCHAR"/>
+        <result property="memory" column="memory" jdbcType="VARCHAR"/>
+        <result property="hardDisk" column="hardDisk" jdbcType="VARCHAR"/>
+        <result property="cpu" column="cpu" jdbcType="VARCHAR"/>
+        <result property="graphicCard" column="graphicCard" jdbcType="VARCHAR"/>
+        <result property="networkCard" column="networkCard" jdbcType="VARCHAR"/>
+        <result property="display" column="display" jdbcType="VARCHAR"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="os" column="os" jdbcType="VARCHAR"/>
+        <result property="software" column="software" jdbcType="VARCHAR"/>
+        <result property="serialNumber" column="serialNumber" jdbcType="VARCHAR"/>
+        <result property="attribute" column="attribute" jdbcType="VARCHAR"/>
+
+        <association property="organization" javaType="com.ct.entity.organization">
+            <result property="org_id" column="org_id" />
+            <!--<result property="org_company" column="org_company"/>-->
+            <result property="org_department" column="org_department"/>
+            <result property="org_address" column="org_address"/>
+        </association>
+
+        <association property="employee" javaType="com.ct.entity.employee">
+            <result property="e_id" column="e_id"/>
+            <result property="e_name" column="e_name"/>
+            <result property="e_title" column="e_title"/>
+            <result property="org_id" column="org_id"/>
+        </association>
+        
+        <association property="mainCategory" javaType="com.ct.entity.mainCategory">
+            <result property="c_main_id" column="c_main_id"/>
+            <result property="c_main_name" column="c_main_name"/>
+        </association>
+
+        <association property="category" javaType="com.ct.entity.category">
+            <result property="c_id" column="c_id"/>
+            <result property="c_name" column="c_name"/>
+        </association>
+
+        <association property="area" javaType="com.ct.entity.area">
+            <result property="area_id" column="area_id"/>
+            <result property="area_name" column="area_name"/>
+        </association>
+    </resultMap>
+
+    <!-- terminals.ter_id, terminals.state, terminals.enabledDate, organization.org_company,
+        organization.org_department, organization.org_address, employee.e_name,
+        mainCategory.c_main_name, category.c_name -->
+    <select id="queryList" resultMap="terminalsMap">
+        select *
+        from terminals
+        inner join organization
+        inner join employee
+        inner join mainCategory
+        inner join category
+        inner join area
+        on terminals.org_id=organization.org_id
+        and terminals.e_id=employee.e_id
+        and terminals.c_main_id=mainCategory.c_main_id
+        and terminals.c_id =category.c_id
+        and terminals.area_id=area.area_id
+    </select>
+
+    <!--新增所有列-->
+    <!--
+        terminals.ter_id
+        organization.org_company
+        organization.org_department
+        organization.org_address
+        employee.e_name
+        mainCategory.c_main_name
+        category.c_name
+        terminals.state
+        terminals.enabledDate
+     -->
+    <insert id="insert">
+        insert into terminals (ter_id, org_id, e_id, c_id, c_main_id, area_id, state, enabledDate, brand, model, serialNumber, mainBoard, memory, hardDisk, cpu, graphicCard, networkCard, display, ip, os, software)
+        values (#{ter_id}, #{org_id}, #{e_id}, #{c_id}, #{c_main_id}, #{area_id}, #{state}, #{enabledDate},
+        #{brand}, #{model}, #{serialNumber}, #{mainBoard}, #{memory}, #{hardDisk}, #{cpu}, #{graphicCard}, #{networkCard}, #{display}, #{ip}, #{os}, #{software})
+    </insert>
+
+    <select id="queryById" resultMap="terminalsMap" parameterType="String">
+        select *
+        from terminals
+        inner join organization
+        inner join employee
+        inner join mainCategory
+        inner join category
+        inner join area
+        on terminals.org_id=organization.org_id
+        and terminals.e_id=employee.e_id
+        and terminals.c_main_id=mainCategory.c_main_id
+        and terminals.c_id =category.c_id
+        and terminals.area_id=area.area_id
+        where terminals.ter_id = #{id}
+    </select>
+
+    <update id="update">
+        update terminals
+        <set>
+            <if test="org_id != null and org_id != ''">
+                org_id = #{org_id},
+            </if>
+            <if test="e_id != null and e_id != ''">
+                e_id = #{e_id},
+            </if>
+            <if test="c_id != null and c_id != ''">
+                c_id = #{c_id},
+            </if>
+            <if test="c_main_id != null and c_main_id != ''">
+                c_main_id = #{c_main_id},
+            </if>
+            <if test="area_id != null and area_id != ''">
+                area_id = #{area_id},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state},
+            </if>
+            <if test="enabledDate != null and enabledDate != ''">
+                enabledDate = #{enabledDate},
+            </if>
+            <if test="brand != null and brand != ''">
+                brand = #{brand},
+            </if>
+            <if test="serialNumber != null and serialNumber != ''">
+                serialNumber = #{serialNumber},
+            </if>
+            <if test="model != null and model != ''">
+                model = #{model},
+            </if>
+            <if test="mainBoard != null and mainBoard != ''">
+                mainBoard = #{mainBoard},
+            </if>
+            <if test="memory != null and memory != ''">
+                memory = #{memory},
+            </if>
+            <if test="hardDisk != null and hardDisk != ''">
+                hardDisk = #{hardDisk},
+            </if>
+            <if test="cpu != null and cpu != ''">
+                cpu = #{cpu},
+            </if>
+            <if test="graphicCard != null and graphicCard != ''">
+                graphicCard = #{graphicCard},
+            </if>
+            <if test="networkCard != null and networkCard != ''">
+                networkCard = #{networkCard},
+            </if>
+            <if test="display != null and display != ''">
+                display = #{display},
+            </if>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="os != null and os != ''">
+                os = #{os},
+            </if>
+            <if test="software != null and software != ''">
+                software = #{software},
+            </if>
+        </set>
+            where ter_id = #{ter_id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from terminals
+        where ter_id = #{id}
+    </delete>
+
+    <select id="countByAreaId" parameterType="INTEGER" resultType="INTEGER">
+        select count(*)
+        from terminals
+        where area_id = #{area_id}
+    </select>
+
+</mapper>

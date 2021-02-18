@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ct.dao.imageDao">
+    <resultMap id="imageMap" type="com.ct.entity.image">
+        <result property="img_id" column="img_id" jdbcType="INTEGER"/>
+        <result property="ter_id" column="ter_id" jdbcType="INTEGER"/>
+        <result property="img_name" column="img_name" jdbcType="VARCHAR"/>
+    </resultMap>
+</mapper>

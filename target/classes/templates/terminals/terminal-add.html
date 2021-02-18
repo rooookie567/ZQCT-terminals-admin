@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加终端页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <script type="text/javascript" th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+
+<body>
+<!--
+<th>终端编号</th>
+<th>所在区域</th>
+<th>终端所在部门</th>
+<th>终端所在地址</th>
+<th>使用人</th>
+<th>设备大类</th>
+<th>设备分类</th>
+<th>使用状态</th>
+<th>启用日期</th>
+<th>操作</th>
+-->
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="ter_id" class="layui-form-label">
+                    <span class="x-red">*</span>终端编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="ter_id" name="ter_id" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="area" class="layui-form-label">
+                    <span class="x-red">*</span>所在区域</label>
+                <div class="layui-input-inline">
+                    <select id="area" name="area" class="valid" lay-filter="area" >
+                        <option value="">请选择</option>
+                        <div th:each="area:${areas}">
+                            <option th:value="${area.area_id}" th:text="${area.area_name}"></option>
+                        </div>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="org_department" class="layui-form-label">
+                    <span class="x-red">*</span>所在部门</label>
+                <div class="layui-input-inline">
+                    <select id="org_department" name="org_department" class="valid" lay-filter="department" >
+                        <!--<option value="">请选择部门</option>-->
+                        <!--<option th:value="1">肇庆分公司云网安交付运维中心</option>-->
+                        <!--<option th:value="2">肇庆分公司网络操作维护中心</option>-->
+                        <!--<option th:value="3">肇庆分公司综合维护优化中心</option>-->
+                        <!--<option th:value="4">高要分公司南兴营业厅</option>-->
+                        <!--<option th:value="5">鼎湖分公司莲花营业厅</option>-->
+                        <!--<option th:value="6">肇庆分公司财务部</option>-->
+                        <!--<option th:value="7">肇庆分公司业务支撑中心</option>-->
+                        <!--<option th:value="8">肇庆分公司市场部</option>-->
+                        <option value="">请选择部门</option>
+                        <div th:each="organization:${organizations}">
+                            <option th:value="${organization.org_id}" th:text="${organization.org_department}"></option>
+                        </div>
+                    </select>
+                </div>
+            </div>
+
+            <!--<div class="layui-form-item">-->
+                <!--<label for="org_department" class="layui-form-label">-->
+                    <!--<span class="x-red">*</span>终端所在部门</label>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<input type="text" id="org_department" name="org_department" required="" lay-verify="required" autocomplete="off"-->
+                           <!--class="layui-input"></div>-->
+            <!--</div>-->
+
+            <div class="layui-form-item">
+                <label for="e_id" class="layui-form-label">
+                    <span class="x-red">*</span>使用人工号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="e_id" name="e_id" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <!--<div class="layui-form-item">-->
+                <!--<label for="c_main_name" class="layui-form-label">-->
+                    <!--<span class="x-red">*</span>设备大类</label>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<input type="text" id="c_main_name" name="c_main_name" required="" lay-verify="required"-->
+                           <!--autocomplete="off" class="layui-input"></div>-->
+            <!--</div>-->
+            <div class="layui-form-item">
+                <label for="c_main_name" class="layui-form-label">
+                    <span class="x-red">*</span>设备大类</label>
+                <div class="layui-input-inline">
+                    <select id="c_main_name" name="c_main_name" class="valid" lay-filter="mainName">
+                        <option value="">请选择</option>
+                        <div th:each="mainCategory:${mainCategories}">
+                            <option th:value="${mainCategory.c_main_id}" th:text="${mainCategory.c_main_name}"></option>
+                        </div>
+                        <!--<option th:value="1">网络设备</option>-->
+                        <!--<option th:value="2">终端设备</option>-->
+                        <!--<option th:value="3">服务器主机</option>-->
+                    </select>
+                </div>
+            </div>
+            <!--<div class="layui-form-item">-->
+                <!--<label for="c_name" class="layui-form-label">-->
+                    <!--<span class="x-red">*</span>设备分类</label>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<input type="text" id="c_name" name="c_name" required="" lay-verify="required"-->
+                           <!--autocomplete="off" class="layui-input"></div>-->
+            <!--</div>-->
+            <div class="layui-form-item">
+                <label for="c_name" class="layui-form-label">
+                    <span class="x-red">*</span>设备分类</label>
+                <div class="layui-input-inline">
+                    <select id="c_name" name="c_name" class="valid" lay-filter="cName">
+                        <!--<option value="">请选择</option>-->
+                        <!--<option th:value="1">手提</option>-->
+                        <!--<option th:value="2">pc</option>-->
+                        <!--<option th:value="3">打印机</option>-->
+                        <!--<option th:value="4">传真机</option>-->
+                        <!--<option th:value="5">复印机</option>-->
+                        <!--<option th:value="6">扫描仪</option>-->
+                        <option value="">请选择</option>
+                        <div th:each="category:${categories}">
+                            <option th:value="${category.c_id}" th:text="${category.c_name}"></option>
+                        </div>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="state" class="layui-form-label">
+                    <span class="x-red">*</span>使用状态</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="state" name="state" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="enabledDate" class="layui-form-label">
+                    <span class="x-red">*</span>启用日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="enabledDate" name="enabledDate" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="brand" class="layui-form-label">
+                    <span class="x-red">*</span>品牌</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="brand" name="brand" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="model" class="layui-form-label">
+                    <span class="x-red">*</span>型号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="model" name="model" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="mainBoard" class="layui-form-label">
+                    <span class="x-red">*</span>主板</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="mainBoard" name="mainBoard" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="memory" class="layui-form-label">
+                    <span class="x-red">*</span>内存</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="memory" name="memory" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="hardDisk" class="layui-form-label">
+                    <span class="x-red">*</span>硬盘</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="hardDisk" name="hardDisk" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="cpu" class="layui-form-label">
+                    <span class="x-red">*</span>CPU</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="cpu" name="cpu" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="graphicCard" class="layui-form-label">
+                    <span class="x-red">*</span>显卡</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="graphicCard" name="graphicCard" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="networkCard" class="layui-form-label">
+                    <span class="x-red">*</span>网卡</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="networkCard" name="networkCard" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="display" class="layui-form-label">
+                    <span class="x-red">*</span>显示器</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="display" name="display" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="ip" class="layui-form-label">
+                    <span class="x-red">*</span>IP</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="ip" name="ip" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="os" class="layui-form-label">
+                    <span class="x-red">*</span>操作系统</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="os" name="os" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="software" class="layui-form-label">
+                    <span class="x-red">*</span>序列号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="serialNumber" name="serialNumber" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="software" class="layui-form-label">
+                    <span class="x-red">*</span>安装软件</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="software" name="software" required="" lay-verify="required"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="add" class="layui-form-label"></label>
+                <button id="add" class="layui-btn" lay-filter="add" lay-submit="">添加</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'layer', 'laydate'],
+    function () {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            //nikename校验规则
+            nikename: function (value) {
+                if (value.length < 5) {
+                    return '昵称至少得5个字符啊';
+                }
+            },
+            //pass校验规则
+            pass: [/(.+){6,12}$/, '密码必须6到12位'],
+            repass: function (value) {
+                if ($('#L_pass').val() != $('#L_repass').val()) {
+                    return '两次密码不一致';
+                }
+            }
+        });
+
+        var org_id = null;
+        form.on('select(department)', function (data) {
+            org_id = data.value;
+
+        });
+
+        var c_main_id = null;
+        form.on('select(mainName)', function (data) {
+            c_main_id = data.value;
+        });
+
+        var c_id = null;
+        form.on('select(cName)', function (data) {
+            c_id = data.value
+        });
+
+        var area_id = null;
+        form.on('select(area)', function (data) {
+            area_id = data.value
+        });
+
+        //终端编号 ter_id;
+        //终端所在组织编号 org_id;
+        //使用员工编号 e_id;
+        //分类编号 c_id;
+        //大类编号 c_main_id;
+        //区域编号 area_id;
+        //使用状态 state;
+        //启用时间 enabledDate;
+        //品牌 brand;
+        //型号 model;
+        //主板 mainBoard;
+        //内存 memory;
+        //硬盘 hardDisk;
+        //CPU cpu;
+        //显卡 graphicCard;
+        //网卡 networkCard;
+        //显示器 display;
+        //ip ip;
+        //操作系统 os;
+        //安装软件 software;
+        //序列号 serialNumber;
+
+        //监听提交
+        form.on('submit(add)', function (data) {
+            console.log(data);
+            //发异步，把数据提交给php
+            var ter_id = data.field.ter_id;
+            var e_id = data.field.e_id;
+            var state = data.field.state;
+            var enabledDate = data.field.enabledDate;
+            var brand = data.field.brand;
+            var model = data.field.model;
+            var mainBoard = data.field.mainBoard;
+            var memory = data.field.memory;
+            var hardDisk = data.field.hardDisk;
+            var cpu = data.field.cpu;
+            var graphicCard = data.field.graphicCard;
+            var networkCard = data.field.networkCard;
+            var display = data.field.display;
+            var ip = data.field.ip;
+            var os = data.field.os;
+            var software = data.field.software;
+            var serialNumber = data.field.serialNumber;
+            $.ajax({
+                type: 'post',
+                url: "/terminal/add",
+                data: {
+                    'ter_id': ter_id,
+                    // 'org_company': org_company,
+                    'org_id': org_id,
+                    'e_id': e_id,
+                    'c_main_id': c_main_id,
+                    'c_id' : c_id,
+                    'area_id' : area_id,
+                    'state' : state,
+                    'enabledDate' : enabledDate,
+                    'brand' : brand,
+                    'model' : model,
+                    'mainBoard' : mainBoard,
+                    'memory' : memory,
+                    'hardDisk' : hardDisk,
+                    'cpu' : cpu,
+                    'graphicCard' : graphicCard,
+                    'networkCard' : networkCard,
+                    'display' : display,
+                    'ip' : ip,
+                    'os' : os,
+                    'software' : software,
+                    'serialNumber' : serialNumber,
+
+                },
+
+            });
+
+
+            layer.alert("增加成功", {
+                    icon: 6
+                },
+                function () {
+                    //关闭当前frame
+                    xadmin.close();
+
+                    // 可以对父窗口进行刷新
+                    xadmin.father_reload();
+                });
+            return false;
+        });
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#enabledDate',//指定元素
+            format:'yyyy-MM-dd',
+            trigger:'click'//解决弹出框中laydate闪退问题
+        });
+
+    });
+
+</script>
+
+<script>var _hmt = _hmt || [];
+(function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+</body>
+
+</html>

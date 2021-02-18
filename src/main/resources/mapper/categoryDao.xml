@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ct.dao.categoryDao">
+
+    <resultMap id="categoryMap" type="com.ct.entity.category">
+        <result property="c_id" column="c_id" jdbcType="INTEGER"/>
+        <result property="c_name" column="c_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryAllCategory" resultMap="categoryMap">
+        select *
+        from category
+    </select>
+</mapper>

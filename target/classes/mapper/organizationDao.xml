@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ct.dao.organizationDao">
+    <resultMap id="organizationMap" type="com.ct.entity.organization">
+        <result property="org_id" column="org_id" jdbcType="INTEGER"/>
+        <!--<result property="org_company" column="org_company" jdbcType="VARCHAR"/>-->
+        <result property="org_department" column="org_department" jdbcType="VARCHAR"/>
+        <result property="org_address" column="org_address" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryAllOrg" resultMap="organizationMap">
+        select *
+        from organization
+    </select>
+</mapper>

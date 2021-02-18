@@ -1,0 +1,110 @@
+<!doctype html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>终端管理系统</title>
+        <meta name="renderer" content="webkit|ie-comp|ie-stand">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+    </head>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="main" style="width: 100%;height:400px;"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/extension/bmap.min.js"></script>
+        <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+        <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        $.get('/terminal/countTerminalByArea',function (data) {
+            myChart.setOption({
+                title: {
+                    text: '各区域终端统计',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                },
+                series: [
+                    {
+                        name: '访问来源',
+                        type: 'pie',
+                        radius: '50%',
+                        data:data.data_pie
+                    }
+                ]
+            })
+        }, 'json')
+
+        // 指定图表的配置项和数据
+        // option = {
+        //     title: {
+        //         text: '某站点用户访问来源',
+        //         subtext: '纯属虚构',
+        //         left: 'center'
+        //     },
+        //     tooltip: {
+        //         trigger: 'item'
+        //     },
+        //     legend: {
+        //         orient: 'vertical',
+        //         left: 'left',
+        //     },
+        //     series: [
+        //         {
+        //             name: '访问来源',
+        //             type: 'pie',
+        //             radius: '50%',
+        //             data: [
+        //                 {value: 1048, name: '搜索引擎'},
+        //                 {value: 735, name: '直接访问'},
+        //                 {value: 580, name: '邮件营销'},
+        //                 {value: 484, name: '联盟广告'},
+        //                 {value: 300, name: '视频广告'}
+        //             ],
+        //             emphasis: {
+        //                 itemStyle: {
+        //                     shadowBlur: 10,
+        //                     shadowOffsetX: 0,
+        //                     shadowColor: 'rgba(0, 0, 0, 0.5)'
+        //                 }
+        //             }
+        //         }
+        //     ]
+        // };
+
+        // 使用刚指定的配置项和数据显示图表。
+        // myChart.setOption(option);
+    </script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>导出终端页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,book-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}">
+    <script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+</head>
+
+<body>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            ,url:'/terminal/json'
+            ,toolbar: true
+            ,title: '终端数据表'
+            ,totalRow: true
+            ,cols: [
+                [
+                    {field:'ter_id', title:'编号', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计行'}
+                    ,{field:'org_department', title:'部门', templet: function(res){
+                        console.log(res)
+                        return res.organization.org_department
+                        }}
+                    ,{field:'org_address', title:'地址', templet: function(res){
+                        return res.organization.org_address
+                    }}
+                    ,{field:'e_name', title:'使用人', templet:function(res){
+                        return res.employee.e_name
+                    },width:100, totalRow: false}
+                    ,{field:'c_main_name', title:'大类',templet: function(res){
+                        return res.mainCategory.c_main_name
+                    }, width:80, sort: true}
+                    ,{field:'c_name', title:'分类', templet: function(res){
+                        return res.category.c_name
+                    },width:80, sort: true, totalRow: false}
+                    ,{field:'state', title:'状态', width:100}
+                    ,{field:'enabledDate', title:'启用日期', width:100}
+                    // ,{field:'ip', title:'IP', width:120}
+                    // ,{field:'joinTime', title:'加入时间', width:120}
+                ]
+            ]
+            ,page: false
+            ,response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.item //解析数据列表
+                };
+            }
+        });
+    });
+</script>
+</body>
+</html>
